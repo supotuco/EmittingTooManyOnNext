@@ -14,7 +14,7 @@ class BuggyClass(private val analytics: FakeAnalytics) {
 
     init {
         emitter.doOnNext { analytics.callOnce() }
-            .buggyMethod()
+            .eventsToResultsBuggy()
             .share()
             .subscribe()
     }
@@ -23,7 +23,7 @@ class BuggyClass(private val analytics: FakeAnalytics) {
         emitter.onNext(event)
     }
 
-    private fun Observable<Event>.buggyMethod(): Observable<LocalResult> {
+    private fun Observable<Event>.eventsToResultsBuggy(): Observable<LocalResult> {
         return Observable.merge(
             this.ofType(Event.SomeEvent.javaClass).map { LocalResult.SomeResult },
             this.ofType(Event.SomeOtherEvent.javaClass).map { LocalResult.SomeResult }
